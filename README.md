@@ -1,18 +1,14 @@
-## Getting Started
+# Arena RPG Data Structures
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## About the project
+This repository consists of a college project for the computer science course. Its main objective is the development of a turn-based combat game between player and machine (PvE) and player against player (PvP). To do this, we put into practice the content learned during the first semester during the study of data structures.
 
-## Folder Structure
+## Project members
+João Pedro Silva da Silva
+Paulo Ricardo da Rocha Cunha
+Noam Geraldo Ismael Coelho
+Rodrigo Marques Matos da Silva
 
-The workspace contains two folders by default, where:
+## Technologies used
+We use pure Java, as the main idea of ​​the project is data structure training.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
