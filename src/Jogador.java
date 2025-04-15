@@ -20,7 +20,7 @@ public class Jogador {
         classeDisponivel.push("guerreiro");
         classeDisponivel.push("arqueiro");
         classePaga.push("assassino");
-        classePaga.push("tanke");
+        classePaga.push("tank");
     }
 
     public static void cadastrar(){
@@ -143,7 +143,7 @@ public class Jogador {
         while(current != null){
             if(current.getData().equals("assassino")){
                 System.out.println("Assassino - 2000 cristais");
-            } else {
+            } else if(current.getData().equals("tank")){
                 System.out.println("Tank - 3500");
             }
         }

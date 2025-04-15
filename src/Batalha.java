@@ -41,7 +41,7 @@ public class Batalha {
         No personagemMaisRapido = ordemMaisRapidos.getHead();
         int contador = 1;
         int posicaoPersonagem = 0;
-        while(ordemMaisRapidos != null){
+        while(ordemMaisRapidos.getHead() != null){
             No current = ordemMaisRapidos.getHead();
             while(current != null){
                 if(current.getPersonagem().getAgilidade() > personagemMaisRapido.getPersonagem().getAgilidade()){
@@ -86,7 +86,22 @@ public class Batalha {
                 }
                 ordemTurnos.add(personagem);
             }
+            ordenarTurnosPorAgilidade();
             estadoBatlha = true;
+        }
+    }
+
+    public void exibirPersonagensBatalha(){
+        No current = ordemTurnos.getHead();
+        int dividirTamanho = ordemTurnos.size() / 2;
+        int contador = 1;
+        while(current != null){
+            if(ordemTurnos.size() % 2 == 0){
+                if(contador <= (ordemTurnos.size() / 2)){
+                    System.out.println();
+                }
+            }
+            contador++;
         }
     }
 
@@ -95,7 +110,7 @@ public class Batalha {
         System.out.println("\nPERSONAGEM ALVO: ");
         Personagem personagemAlvo = null;
 
-        while(personagemAlvo == null){
+        while(personagemAlvo == null || !personagemAlvo.estaVivo()){
             System.out.println("\nPERSONAGEM ALVO: ");
             personagemAlvo = jogadorAdversario.selecionarPersonagem();
 
