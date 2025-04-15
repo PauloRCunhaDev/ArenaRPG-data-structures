@@ -12,6 +12,8 @@ public class Personagem {
     private int manaMaxima = 0;
     private int manaAtual = manaMaxima;
     private int defesa = 0;
+    private Personagem provocador = null;
+    int defesaAntes = defesa;
 
     public Personagem(String nome, String classe) {
         Personagem.idPersonagem = idPersonagem++;
@@ -58,42 +60,36 @@ public class Personagem {
         }
     }
     
-    public void receberDano(int valor){
-        if(estaVivo()){
-            this.vidaAtual = this.vidaAtual - valor;
-        }else{
-            System.out.println("\nImpossivel receber dano, o personagem nao esta mais vivo!");
-        }
-    }
+    
 
     private void adicionarHabilidadesMago() {
-        habilidades.inserirTail(new Habilidade("m01", "Bola de Fogo", 20, "Causa dano mágico"));
-        habilidades.inserirTail(new Habilidade("m02", "Cura", 25, "Restaura vida"));
-        habilidades.inserirTail(new Habilidade("m03", "Barreira Mágica", 15, "Reduz dano recebido"));
+        habilidades.inserirTail(new Habilidade("m01", "Bola de Fogo", 20, "Causa dano mágico", 60, "dano"));
+        habilidades.inserirTail(new Habilidade("m02", "Cura", 25, "Restaura vida", 20, "cura"));
+        habilidades.inserirTail(new Habilidade("m03", "Barreira Mágica", 15, "Reduz dano recebido", 10, "defesa"));
     }
 
     private void adicionarHabilidadesGuerreiro() {
-        habilidades.inserirTail(new Habilidade("g01", "Golpe Poderoso", 10, "Dano físico alto"));
-        habilidades.inserirTail(new Habilidade("g02", "Defesa Total", 15, "Aumenta defesa"));
-        habilidades.inserirTail(new Habilidade("g03", "Provocação", 5, "Atrai inimigos"));
+        habilidades.inserirTail(new Habilidade("g01", "Golpe Poderoso", 10, "Dano físico alto", 40, "dano"));
+        habilidades.inserirTail(new Habilidade("g02", "Defesa Total", 15, "Aumenta defesa", 50, "defesa"));
+        habilidades.inserirTail(new Habilidade("g03", "Provocação", 5, "Atrai inimigos", 0, "provocar"));
     }
 
     private void adicionarHabilidadesArqueiro() {
-        habilidades.inserirTail(new Habilidade("a01", "Tiro Preciso", 10, "Dano crítico"));
-        habilidades.inserirTail(new Habilidade("a02", "Chuva de Flechas", 20, "Dano em área"));
-        habilidades.inserirTail(new Habilidade("a03", "Fuga Ágil", 5, "Aumenta evasão"));
+        habilidades.inserirTail(new Habilidade("a01", "Tiro Preciso", 10, "Dano crítico", 50, "dano"));
+        habilidades.inserirTail(new Habilidade("a02", "Chuva de Flechas", 20, "Dano em área", 30, "dano"));
+        habilidades.inserirTail(new Habilidade("a03", "Fuga Ágil", 5, "Aumenta evasão", 10, "defesa"));
     }
 
     private void adicionarHabilidadesAssassino() {
-        habilidades.inserirTail(new Habilidade("as01", "Ataque Furtivo", 15, "Dano alto por trás"));
-        habilidades.inserirTail(new Habilidade("as02", "Veneno", 10, "Dano contínuo"));
-        habilidades.inserirTail(new Habilidade("as03", "Invisibilidade", 30, "Fica invisível"));
+        habilidades.inserirTail(new Habilidade("as01", "Ataque Furtivo", 15, "Dano alto por trás", 50, "dano"));
+        habilidades.inserirTail(new Habilidade("as02", "Investida", 10, "Dano direto", 40, "dano"));
+        habilidades.inserirTail(new Habilidade("as03", "Invisibilidade", 30, "Fica invisível", 0, "defesa"));
     }
 
     private void adicionarHabilidadesTank() {
-        habilidades.inserirTail(new Habilidade("t01", "Defesa Fortificada", 10, "Aumenta defesa drasticamente"));
-        habilidades.inserirTail(new Habilidade("t02", "Agarrão", 5, "Imobiliza inimigo"));
-        habilidades.inserirTail(new Habilidade("t03", "Grito de Guerra", 10, "Reduz ataque inimigo"));
+        habilidades.inserirTail(new Habilidade("t01", "Defesa Fortificada", 10, "Aumenta defesa drasticamente", 30, "defesa"));
+        habilidades.inserirTail(new Habilidade("t02", "Bloqueio agressivo", 5, "Causa dano com seu escudo", 30, "dano"));
+        habilidades.inserirTail(new Habilidade("t03", "Grito de Guerra", 10, "Reduz ataque inimigo", 10, "provocar"));
     }
 
     public void usarHabilidade(String idHabilidade, Personagem alvo) {
@@ -116,7 +112,7 @@ public class Personagem {
         
         this.manaAtual -= habilidade.getCustoMana();
         System.out.println(this.nome + " usou " + habilidade.getNome() + " em " + alvo.getNome());
-        // Aqui você implementaria o efeito real da habilidade
+        habilidade.escolherEfeito(this, habilidade, alvo);
     }
 
     private Habilidade buscarHabilidade(String idHabilidade) {
@@ -140,22 +136,20 @@ public class Personagem {
         }
     }
 
-    public void curar(int valor){
-        if(estaVivo()){
-            System.out.println("\nImpossivel receber dano, o personagem nao esta mais vivo!");
-        }else if(this.vidaAtual == this.vidaMaxima){
-            System.out.println("\nImpossivel curar, o personagem esta com a maxima vida possivel!");
-        }else if(valor > this.vidaMaxima){
-            this.vidaAtual = this.vidaMaxima;
-        }else{
-            this.vidaAtual = this.vidaAtual + valor;
-        }
+    public void resetBattle() {
+        vidaAtual = vidaMaxima;
+        manaAtual = manaMaxima;
+        defesa = defesaAntes;
     }
 
     public boolean estaVivo(){
         return vidaAtual > 0;
     }
 
+    public void normalizarDefesa () {
+        this.defesa = defesaAntes;
+    }
+ 
     public void subirNivel(){
         this.nivel++;
     }
@@ -180,6 +174,10 @@ public class Personagem {
         return vidaAtual;
     }
 
+    public void setVidaAtual(int vidaAtual) {
+        this.vidaAtual = vidaAtual;
+    }
+
     public int getManaMaxima() {
         return manaMaxima;
     }
@@ -195,4 +193,21 @@ public class Personagem {
     public void setAgilidade(int agilidade) {
         this.agilidade = agilidade;
     }
+
+    public Personagem getProvocador() {
+        return provocador;
+    }
+
+    public void setProvocador(Personagem provocador) {
+        this.provocador = provocador;
+    }
+
+    public int getDefesa() {
+        return defesa;
+    }
+
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
+    }
+
 }

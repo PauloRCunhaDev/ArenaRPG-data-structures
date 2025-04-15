@@ -1,14 +1,18 @@
-public class Habilidade {
+public class Habilidade  extends HabilidadesEfeito{
     private String id;
     private String nome;
     private int custoMana;
     private String efeito;
+    private int dano;
+    private String tipo;
     
-    public Habilidade(String id, String nome, int custoMana, String efeito) {
+    public Habilidade(String id, String nome, int custoMana, String efeito, int dano, String tipo) {
         this.id = id;
         this.nome = nome;
         this.custoMana = custoMana;
         this.efeito = efeito;
+        this.dano = dano;
+        this.tipo = tipo;
     }
 
     public String getId() {
@@ -41,5 +45,21 @@ public class Habilidade {
 
     public void setEfeito(String efeito) {
         this.efeito = efeito;
+    }
+
+    public int getDano() {
+        return dano;
+    }
+
+    public void setDano(int dano) {
+        this.dano = dano;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }
