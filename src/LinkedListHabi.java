@@ -12,9 +12,11 @@ public class LinkedListHabi {
 
         if(this.head == null){
             this.head = novo;
+            this.tail = novo;
             return;
         }
         novo.setNext(this.head);
+        this.head.setPrev(novo);
         this.head = novo;
     }
 
@@ -22,9 +24,11 @@ public class LinkedListHabi {
         No novo = new No(habilidade);
 
         if(this.tail == null){
+            this.head = novo;
             this.tail = novo;
             return;
         }
+        novo.setPrev(this.tail);
         this.tail.setNext(novo);
         this.tail = novo;
     }
@@ -110,29 +114,39 @@ public class LinkedListHabi {
 
     public void remover(int posicao){
         if(this.head == null){
-            System.out.println("\nA lista de habilidades esta vazia!\n");
+            System.out.println("\nA lista de Habilidades esta vazia!\n");
             return;
         }
-
-        if(posicao <= 0){
-            removerHead();
+  
+        if(head == tail){
+           if(posicao > 1){
+              System.out.println("\nNao existe habilidade nessa posicao");
+           }else{
+              head = null;
+              tail = null;
+           }
+           return;
+        }
+  
+        No current = head;
+  
+        for(int i = 1; i < posicao; i++){
+           while(current != null){
+              current = current.getNext();
+           }
+        }
+  
+        if(current == null){
+           System.out.println("\nNao existe habilidade nessa posicao");
+        }else if(current.getNext() == null){
+           removerTail();
+        }else if(current.getPrev() == null){
+           removerHead();
         }else{
-            No current = this.head;
-            int contador = 1;
-
-            while(current != null && contador < posicao){
-                current = current.getNext();
-                contador++;
-            }
-
-            if(current == null){
-                removerTail();
-            }else{
-                current.getPrev().setNext(current.getNext());
-                current.getNext().setPrev(current.getPrev());
-                current.setNext(null);
-                current.setPrev(null);
-            }
+           current.getPrev().setNext(current.getNext());
+           current.getNext().setPrev(current.getPrev());
+           current.setNext(null);
+           current.setPrev(null);
         }
     }
 

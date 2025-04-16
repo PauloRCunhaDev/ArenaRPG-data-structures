@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -11,11 +12,15 @@ public class Batalha {
     private ArrayList<Personagem> bots = new ArrayList<>();
     private Fila ordemTurnos = new Fila();
     private Pilha colocacaoFinal = new Pilha(1);
-    private Gerenciador gerenciador = new Gerenciador();
+    private static Gerenciador gerenciador = new Gerenciador();
     private Scanner sc = new Scanner(System.in);
 
     public Batalha() {
         Batalha.idBtalha = idBtalha++;
+    }
+
+    public static void inicializarGerenciadorBatalha(Gerenciador gerenciador){
+        Batalha.gerenciador = gerenciador;
     }
 
     public boolean verificarPersonagemRepetido(Personagem personagem){
@@ -25,6 +30,7 @@ public class Batalha {
                 System.out.println("\nErro, esse personagem ja foi selecionado para a batalha");
                 return true;
             }
+            current = current.getNext();
         }
         return false;
     }
@@ -43,9 +49,9 @@ public class Batalha {
         }
 
         No personagemMaisRapido = ordemMaisRapidos.getHead();
-        int contador = 1;
         int posicaoPersonagem = 0;
         while(ordemMaisRapidos.getHead() != null){
+            int contador = 1;
             No current = ordemMaisRapidos.getHead();
             while(current != null){
                 if(current.getPersonagem().getAgilidade() > personagemMaisRapido.getPersonagem().getAgilidade()){
@@ -53,6 +59,7 @@ public class Batalha {
                     posicaoPersonagem = contador;
                 }
                 contador++;
+                current = current.getNext();
             }
             ordemMaisRapidos.remover(posicaoPersonagem);
             ordemTurnos.add(personagemMaisRapido.getPersonagem());
@@ -76,25 +83,25 @@ public class Batalha {
             this.colocacaoFinal.setSize(quantidade);
 
             System.out.println("\nJogador desafiante:\n\n\t");
-            for(int i = 0; i < quantidade; i++){
-                Personagem personagem = jogador.selecionarPersonagem();
-                if(personagem == null || verificarPersonagemRepetido(personagem)){
+            for(int i = 1; i <= quantidade; i++){
+                Personagem personagemD = jogador.selecionarPersonagem();
+                if(personagemD == null || verificarPersonagemRepetido(personagemD)){
                     limparOrdemTurnos();
                     break;
                 }
-                ordemTurnos.add(personagem);
-                exibicaoPersonagens.add(personagem);
+                ordemTurnos.add(personagemD);
+                exibicaoPersonagens.add(personagemD);
             }
             
             System.out.println("\nJogador adversario:\n\n\t");
-            for(int i = 0; i < quantidade; i++){
-                Personagem personagem = jogadorAdversario.selecionarPersonagem();
-                if(personagem == null){
+            for(int i = 1; i <= quantidade; i++){
+                Personagem personagemA = jogadorAdversario.selecionarPersonagem();
+                if(personagemA == null || verificarPersonagemRepetido(personagemA)){
                     limparOrdemTurnos();
                     break;
                 }
-                ordemTurnos.add(personagem);
-                exibicaoPersonagens.add(personagem);
+                ordemTurnos.add(personagemA);
+                exibicaoPersonagens.add(personagemA);
             }
             ordenarTurnosPorAgilidade();
             this.estadoBatlha = true;
@@ -118,36 +125,35 @@ public class Batalha {
         ordemTurnos = new Fila();
         Personagem bot;
         int botAleatorio;
-        int inserirBots;
 
         System.out.println("\nQuantidade de personagens partcipantes: ");
         int quantidade = sc.nextInt();
         this.colocacaoFinal.setSize(quantidade);
 
-        System.out.println("\nJogador desafiante:\n\n\t");
-        for(int i = 0; i < quantidade; i++){
-            Personagem personagem = jogador.selecionarPersonagem();
-            if(personagem == null || verificarPersonagemRepetido(personagem)){
+        System.out.println("\nJogador desafiante:\n\t");
+        for(int i = 1; i <= quantidade; i++){
+            Personagem personagemD = jogador.selecionarPersonagem();
+            if(personagemD == null || verificarPersonagemRepetido(personagemD)){
                 limparOrdemTurnos();
                 break;
             }
             botAleatorio = ramdom.nextInt(3);
             switch (botAleatorio) {
                 case 0 ->{
-                    bot = new Personagem("Golem", gerarNivelBot(personagem));
+                    bot = new Personagem("Golem", gerarNivelBot(personagemD));
                 }
                 case 1 ->{
-                    bot = new Personagem("Lobo de Prata", gerarNivelBot(personagem));
+                    bot = new Personagem("Lobo de Prata", gerarNivelBot(personagemD));
                 }
                 default ->{
-                    bot = new Personagem("Guardião Esqueleto", gerarNivelBot(personagem));
+                    bot = new Personagem("Guardião Esqueleto", gerarNivelBot(personagemD));
                 }
             }
             aumentarAtributosBot(bot);
             this.bots.add(bot);
-            ordemTurnos.add(personagem);
-            exibicaoPersonagens.add(personagem);
-            if(i == (quantidade - 1)){
+            ordemTurnos.add(personagemD);
+            exibicaoPersonagens.add(personagemD);
+            if(i == quantidade){
                 for(Personagem inimigo : this.bots){
                     ordemTurnos.add(inimigo);
                     exibicaoPersonagens.add(inimigo);
@@ -170,50 +176,22 @@ public class Batalha {
             }
             contador++;
         }
-        System.out.println("\t   BATALHA\n\nTURNO " + this.contadorTurnoAtual + ":\n\n");
-        contador = 1;
-        while(contador <= 12){
-            for(Personagem personagem : personagensAliados){
-                if(contador == 1){
-                    System.out.println(personagem.getNome() + "\t");
-                }
-                if(contador == 2){
-                    System.out.println("\nID: " + personagem.getIdPersonagem() + "\t");
-                }
-                if(contador == 3){
-                    System.out.println("\nNivel: " + personagem.getNivel() + "\t");
-                }
-                if(contador == 4){
-                    System.out.println("\nVida Atual: " + personagem.getVidaAtual() + "\t");
-                }
-                if(contador == 5){
-                    System.out.println("\nMana Atual: " + personagem.getManaAtual() + "\t");
-                }
-                if(contador == 6){
-                    System.out.println("\nAgilidade: " + personagem.getAgilidade() + "\t");
-                }
-            }
-            for(Personagem personagem : personagensAdversarios){
-                if(contador == 7){
-                    System.out.println("\n\n\n" + personagem.getNome() + "\t");
-                }
-                if(contador == 8){
-                    System.out.println("\nID: " + personagem.getIdPersonagem() + "\t");
-                }
-                if(contador == 9){
-                    System.out.println("\nNivel: " + personagem.getNivel() + "\t");
-                }
-                if(contador == 10){
-                    System.out.println("\nVida Atual: " + personagem.getVidaAtual() + "\t");
-                }
-                if(contador == 11){
-                    System.out.println("\nMana Atual: " + personagem.getManaAtual() + "\t");
-                }
-                if(contador == 12){
-                    System.out.println("\nAgilidade: " + personagem.getAgilidade() + "\t");
-                }
-            }
-            contador++;
+        System.out.println("\t   BATALHA\n\nTURNO " + this.contadorTurnoAtual + ":");
+        for(Personagem personagem : personagensAliados){
+            System.out.println("\n" + personagem.getNome() + "\t");
+            System.out.println("\nID: " + personagem.getIdPersonagem() + "\t");
+            System.out.println("\nNivel: " + personagem.getNivel() + "\t");
+            System.out.println("\nVida Atual: " + personagem.getVidaAtual() + "\t");
+            System.out.println("\nMana Atual: " + personagem.getManaAtual() + "\t");
+            System.out.println("\nAgilidade: " + personagem.getAgilidade() + "\t");
+        }
+        for(Personagem personagem : personagensAdversarios){
+            System.out.println("\n" + personagem.getNome() + "\t");
+            System.out.println("\nID: " + personagem.getIdPersonagem() + "\t");
+            System.out.println("\nNivel: " + personagem.getNivel() + "\t");
+            System.out.println("\nVida Atual: " + personagem.getVidaAtual() + "\t");
+            System.out.println("\nMana Atual: " + personagem.getManaAtual() + "\t");
+            System.out.println("\nAgilidade: " + personagem.getAgilidade() + "\t");
         }
     }
 
@@ -265,8 +243,8 @@ public class Batalha {
             }else{
                 filaAuxPersonagens.add(this.ordemTurnos.remove().getPersonagem());
             }
+            current = current.getNext();
         }
-        current = current.getNext();
 
         current = filaAuxPersonagens.getHead();
         while(current != null){
@@ -351,23 +329,25 @@ public class Batalha {
     }
 
     public Personagem selecaoBotAdversario(){
-        Random ramdom = new Random();
-        int escolha = ramdom.nextInt((ordemTurnos.size() / 2));
-        int escolhido = 0;
+        if(exibicaoPersonagens.isEmpty()){
+            return null;
+        }
+        ArrayList<Personagem> personagensAliados = new ArrayList<>();
+        int metade = (exibicaoPersonagens.size() / 2);
 
-        No current = ordemTurnos.getHead();
-        while(current != null){
-            for(Personagem bot : this.bots){
-                if(bot.getIdPersonagem() != current.getPersonagem().getIdPersonagem()){
-                    if(escolha == escolhido){
-                        return current.getPersonagem();
-                    }else{
-                        escolhido++;
-                    }
-                }
+        for(int i = 0; i < metade; i++){
+            Personagem p = exibicaoPersonagens.get(i);
+            if(p.estaVivo()){
+                personagensAliados.add(p);
             }
         }
-        return null;
+
+        if(personagensAliados.isEmpty()){
+            return null;
+        }
+
+        Random ramdom = new Random();
+        return personagensAliados.get(ramdom.nextInt(personagensAliados.size()));
     }
 
     public boolean eBot(Personagem personagem){

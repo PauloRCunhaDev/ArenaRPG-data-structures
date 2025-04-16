@@ -3,24 +3,23 @@ public class Personagem {
     private static int idPersonagem = 0;
     private String nome;
     private String classe; //Classe do personagem
-    private int agilidade = 0;
-    private int nivel = 0;
-    private int vidaMaxima = 0;
-    private int vidaAtual = vidaMaxima;
-    private int manaMaxima = 0;
-    private int manaAtual = manaMaxima;
-    private int defesa = 0;
+    private int agilidade;
+    private int nivel;
+    private int vidaMaxima;
+    private int vidaAtual;
+    private int manaMaxima;
+    private int manaAtual;
+    private int defesa;
     private Personagem provocador = null;
     int defesaAntes = defesa;
 
     public Personagem(String nome, String classe) {
-        Personagem.idPersonagem = idPersonagem++;
         this.nome = nome;
         this.classe = classe;
         this.nivel = 1;
         
         //Definição de status por classe
-        if(null != classe)switch (classe) {
+        switch (classe) {
             case "mago" -> {
                 this.vidaMaxima = 100;
                 this.manaMaxima = 250;
@@ -57,6 +56,9 @@ public class Personagem {
                 adicionarHabilidadesTank();
             }
         }
+
+        this.vidaAtual = vidaMaxima;
+        this.manaAtual = manaMaxima;
     }
 
     public Personagem(String nome, int nivel) {
@@ -65,7 +67,7 @@ public class Personagem {
         this.nivel = nivel;
         
         //Definição de status por classe
-        if(null != classe)switch (nome) {
+        switch (nome) {
             case "Golem" -> {
                 this.vidaMaxima = 220;
                 this.manaMaxima = 75;
@@ -107,7 +109,15 @@ public class Personagem {
                 }
             }
         }
+
+        this.vidaAtual = vidaMaxima;
+        this.manaAtual = manaMaxima;
     }
+
+    public static void mudarId(){
+        Personagem.idPersonagem++;
+    }
+
     public void desbloquearHabilidade(){
         switch (classe) {
             case "mago" -> {

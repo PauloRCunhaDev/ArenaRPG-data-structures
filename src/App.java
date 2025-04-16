@@ -32,14 +32,14 @@ public class App {
                                 case 3 -> {
                                     Batalha batalha = new Batalha();
                                     batalha.iniciarBatalha(jogador);
-                                    while(batalha.verificarJogadorVencedor(jogador)){
+                                    while(batalha.verificarJogadorVencedor(jogador) == false){
                                         batalha.executarTurno(jogador);
                                     }
                                 }
                                 case 4 -> {
                                     Batalha batalha = new Batalha();
                                     batalha.iniciarBatalhaBot(jogador);
-                                    while(batalha.verificarJogadorVencedor(jogador)){
+                                    while(batalha.verificarJogadorVencedor(jogador) == false){
                                         batalha.executarTurnoBot(jogador);
                                     }
                                 }

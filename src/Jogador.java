@@ -37,6 +37,7 @@ public class Jogador {
 
                 jogador = new Jogador(nome, senha);
                 gerenciador.jogadores.add(jogador);
+                Batalha.inicializarGerenciadorBatalha(Jogador.gerenciador);
                 System.out.println("\nSua conta foi criada com sucesso!\n");
             }else{
                 System.out.println("\nEsse nome ja existe, crie outro nome!");
@@ -109,6 +110,7 @@ public class Jogador {
                     } else {
                         laco = false;
                         Personagem personagem = new Personagem(nomePer, classePer);
+                        Personagem.mudarId();
                         personagens.inserirTail(personagem);
                         System.out.println("\nPersonagem criado com sucesso!");
                     }
@@ -128,6 +130,7 @@ public class Jogador {
 
         No current = personagens.getHead();
         while(current != null && !current.getPersonagem().getNome().equals(nomePer)){
+            System.out.println("Tome");
             current = current.getNext();
         }
 
@@ -149,6 +152,7 @@ public class Jogador {
                 } else if(current.getData().equals("tank")){
                     System.out.println("Tank - 3500");
                 }
+                current = current.getNext();
             }
             System.out.println("(Qualquer) sair");
 
