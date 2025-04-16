@@ -21,5 +21,11 @@ public class Gerenciador {
         Jogador jogador = buscarJogador(nome);
         return jogador.getSenha().equals(senha);
     }
-    
+
+    public void alertarHabilidadeDesbloqueada(Personagem personagem){
+        if(personagem.getNivel() == 10 || personagem.getNivel() == 20 || personagem.getNivel() == 30){
+            personagem.desbloquearHabilidade();
+            System.out.println("\nO personagem " + personagem.getNome() + " desbloqueou uma nova habilidade");
+        }
+    }
 }

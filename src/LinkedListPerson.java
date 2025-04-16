@@ -13,9 +13,11 @@ public class LinkedListPerson {
 
         if(this.head == null){
             this.head = novo;
+            this.tail = novo;
             return;
         }
         novo.setNext(this.head);
+        this.head.setPrev(novo);
         this.head = novo;
     }
 
@@ -23,10 +25,12 @@ public class LinkedListPerson {
         No novo = new No(personagem);
 
         if(this.tail == null){
+            this.head = novo;
             this.tail = novo;
             return;
         }
         this.tail.setNext(novo);
+        novo.setNext(novo);
         this.tail = novo;
     }
 

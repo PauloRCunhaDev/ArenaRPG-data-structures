@@ -1,12 +1,10 @@
-
-
 public class Personagem {
-    private static LinkedListHabi habilidades; //Lista para as habilidades de cada personagens criado
+    private static LinkedListHabi habilidades = new LinkedListHabi(); //Lista para as habilidades de cada personagens criado
     private static int idPersonagem = 0;
     private String nome;
     private String classe; //Classe do personagem
     private int agilidade = 0;
-    private int nivel = 1;
+    private int nivel = 0;
     private int vidaMaxima = 0;
     private int vidaAtual = vidaMaxima;
     private int manaMaxima = 0;
@@ -19,6 +17,7 @@ public class Personagem {
         Personagem.idPersonagem = idPersonagem++;
         this.nome = nome;
         this.classe = classe;
+        this.nivel = 1;
         
         //Definição de status por classe
         if(null != classe)switch (classe) {
@@ -59,37 +58,129 @@ public class Personagem {
             }
         }
     }
-    
-    
 
+    public Personagem(String nome, int nivel) {
+        Personagem.idPersonagem = idPersonagem++;
+        this.nome = nome;
+        this.nivel = nivel;
+        
+        //Definição de status por classe
+        if(null != classe)switch (nome) {
+            case "Golem" -> {
+                this.vidaMaxima = 220;
+                this.manaMaxima = 75;
+                this.agilidade = 25;
+                this.defesa = 15;
+                if(nivel <= 15){
+                    habilidades.inserirTail(new Habilidade("gl01", "Martelo de Pedra", 0, "Dano moderado", 40, "dano"));
+                    habilidades.inserirTail(new Habilidade("gl02", "Defesa Ferrea", 30, "Anula um ataque", 500, "defesa"));
+                } else {
+                    habilidades.inserirTail(new Habilidade("gl01", "Martelo de Pedra", 0, "Dano moderado", 60, "dano"));
+                    habilidades.inserirTail(new Habilidade("gl02", "Defesa Ferrea", 30, "Anula um ataque", 500, "defesa"));
+                    habilidades.inserirTail(new Habilidade("gl03", "Tremor Terrestre", 45, "Dano alto", 75, "dano"));
+                }
+            }
+            case "Lobo de Prata" -> {
+                this.vidaMaxima = 125;
+                this.manaMaxima = 90;
+                this.agilidade = 90;
+                this.defesa = 10;
+                if(nivel <= 10){
+                    habilidades.inserirTail(new Habilidade("lp01", "Mordida Crescente", 0, "Dano baixo", 35, "dano"));
+                } else {
+                    habilidades.inserirTail(new Habilidade("lp01", "Mordida Crescente", 0, "Dano baixo", 55, "dano"));
+                    habilidades.inserirTail(new Habilidade("lp02", "Eclipse de Prata", 45, "Restaura vida", 30, "cura"));
+                }
+            }
+            case "Guardião Esqueleto" -> {
+                this.vidaMaxima = 75;
+                this.manaMaxima = 200;
+                this.agilidade = 50;
+                this.defesa = 5;
+                if(nivel <= 15){
+                    habilidades.inserirTail(new Habilidade("ge01", "Olhar Temido", 0, "Evasão alta", 20, "defesa"));
+                    habilidades.inserirTail(new Habilidade("ge02", "Ataque Especial", 50, "Dano moderado", 30, "dano"));
+                } else {
+                    habilidades.inserirTail(new Habilidade("ge01", "Olhar Temido", 0, "Evasão alta", 40, "defesa"));
+                    habilidades.inserirTail(new Habilidade("ge02", "Piedade Vingativa", 25, "Dano moderado", 45, "dano"));
+                    habilidades.inserirTail(new Habilidade("ge02", "Tempo Ruim", 120, "Dano explosivo", 100, "dano"));
+                }
+            }
+        }
+    }
+    public void desbloquearHabilidade(){
+        switch (classe) {
+            case "mago" -> {
+                adicionarHabilidadesMago();
+            }
+            case "guerreiro" -> {
+                adicionarHabilidadesGuerreiro();
+            }
+            case "arqueiro" -> {
+                adicionarHabilidadesArqueiro();
+            }
+            case "assassino" -> {
+                adicionarHabilidadesAssassino();
+            }
+            case "tank" -> {
+                adicionarHabilidadesTank();
+            }
+        }
+    }
+    
     private void adicionarHabilidadesMago() {
-        habilidades.inserirTail(new Habilidade("m01", "Bola de Fogo", 20, "Causa dano mágico", 60, "dano"));
-        habilidades.inserirTail(new Habilidade("m02", "Cura", 25, "Restaura vida", 20, "cura"));
-        habilidades.inserirTail(new Habilidade("m03", "Barreira Mágica", 15, "Reduz dano recebido", 10, "defesa"));
+        switch (getNivel()) {
+            case 1 -> habilidades.inserirTail(new Habilidade("m01", "Choque", 0, "Dano baixo", 30, "dano"));
+            case 10 -> habilidades.inserirTail(new Habilidade("m02", "Bola de Fogo", 50, "Dano alto", 60, "dano"));
+            case 20 -> habilidades.inserirTail(new Habilidade("m03", "Cura", 75, "Restaura vida", 40, "cura"));
+            case 30 -> habilidades.inserirTail(new Habilidade("m04", "Barreira Mágica", 35, "Reduz levemente dano", 10, "defesa"));
+            default -> {
+            }
+        }
     }
 
     private void adicionarHabilidadesGuerreiro() {
-        habilidades.inserirTail(new Habilidade("g01", "Golpe Poderoso", 10, "Dano físico alto", 40, "dano"));
-        habilidades.inserirTail(new Habilidade("g02", "Defesa Total", 15, "Aumenta defesa", 50, "defesa"));
-        habilidades.inserirTail(new Habilidade("g03", "Provocação", 5, "Atrai inimigos", 0, "provocar"));
+        switch (getNivel()) {
+            case 1 -> habilidades.inserirTail(new Habilidade("g01", "Murro", 0, "Dano baixo", 35, "dano"));
+            case 10 -> habilidades.inserirTail(new Habilidade("g02", "Golpe Poderoso", 10, "Dano alto", 40, "dano"));
+            case 20 -> habilidades.inserirTail(new Habilidade("g03", "Levantar Guarda", 20, "Aumenta drasticamente defesa", 30, "defesa"));
+            case 30 -> habilidades.inserirTail(new Habilidade("g04", "Provocação", 15, "Atrai inimigos", 0, "provocar"));
+            default -> {
+            }
+        }
     }
 
     private void adicionarHabilidadesArqueiro() {
-        habilidades.inserirTail(new Habilidade("a01", "Tiro Preciso", 10, "Dano crítico", 50, "dano"));
-        habilidades.inserirTail(new Habilidade("a02", "Chuva de Flechas", 20, "Dano em área", 30, "dano"));
-        habilidades.inserirTail(new Habilidade("a03", "Fuga Ágil", 5, "Aumenta evasão", 10, "defesa"));
+        switch (getNivel()) {
+            case 1 -> habilidades.inserirTail(new Habilidade("a01", "Flechada", 0, "Dano baixo", 30, "dano"));
+            case 10 -> habilidades.inserirTail(new Habilidade("a02", "Tiro Preciso", 25, "Dano crítico", 50, "dano"));
+            case 20 -> habilidades.inserirTail(new Habilidade("a03", "Primeiros Socorros", 20, "Restaura Vida", 25, "cura"));
+            case 30 -> habilidades.inserirTail(new Habilidade("a04", "Fuga Ágil", 15, "Aumenta levemente evasão", 15, "defesa"));
+            default -> {
+            }
+        }
     }
 
     private void adicionarHabilidadesAssassino() {
-        habilidades.inserirTail(new Habilidade("as01", "Ataque Furtivo", 15, "Dano alto por trás", 50, "dano"));
-        habilidades.inserirTail(new Habilidade("as02", "Investida", 10, "Dano direto", 40, "dano"));
-        habilidades.inserirTail(new Habilidade("as03", "Invisibilidade", 30, "Fica invisível", 0, "defesa"));
+        switch (getNivel()) {
+            case 1 -> habilidades.inserirTail(new Habilidade("as01", "Apunhalar", 0, "Dano baixo", 35, "dano"));
+            case 10 -> habilidades.inserirTail(new Habilidade("as02", "Ataque Furtivo", 25, "Dano moderado", 45, "dano"));
+            case 20 -> habilidades.inserirTail(new Habilidade("as03", "Investida", 35, "Dano alto", 55, "dano"));
+            case 30 -> habilidades.inserirTail(new Habilidade("as04", "Invisibilidade", 45, "Fica invisível", 0, "defesa"));
+            default -> {
+            }
+        }
     }
 
     private void adicionarHabilidadesTank() {
-        habilidades.inserirTail(new Habilidade("t01", "Defesa Fortificada", 10, "Aumenta defesa drasticamente", 30, "defesa"));
-        habilidades.inserirTail(new Habilidade("t02", "Bloqueio agressivo", 5, "Causa dano com seu escudo", 30, "dano"));
-        habilidades.inserirTail(new Habilidade("t03", "Grito de Guerra", 10, "Reduz ataque inimigo", 10, "provocar"));
+        switch (getNivel()) {
+            case 1 -> habilidades.inserirTail(new Habilidade("t01", "Empurrão", 0, "Dano leve", 30, "dano"));
+            case 10 -> habilidades.inserirTail(new Habilidade("t02", "Defesa Fortificada", 15, "Aumenta defesa drasticamente", 30, "defesa"));
+            case 20 -> habilidades.inserirTail(new Habilidade("t03", "Bloqueio agressivo", 5, "Dano moderado", 45, "dano"));
+            case 30 -> habilidades.inserirTail(new Habilidade("t04", "Grito de Guerra", 10, "Atrai inimigo", 0, "provocar"));
+            default -> {
+            }
+        }
     }
 
     public void usarHabilidade(String idHabilidade, Personagem alvo) {
@@ -170,6 +261,10 @@ public class Personagem {
         return vidaMaxima;
     }
 
+    public void setVidaMaxima(int vidaMaxima) {
+        this.vidaMaxima = vidaMaxima;
+    }
+
     public int getVidaAtual() {
         return vidaAtual;
     }
@@ -210,4 +305,11 @@ public class Personagem {
         this.defesa = defesa;
     }
 
+    public void setManaMaxima(int manaMaxima) {
+        this.manaMaxima = manaMaxima;
+    }
+
+    public void setManaAtual(int manaAtual) {
+        this.manaAtual = manaAtual;
+    }
 }

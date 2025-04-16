@@ -1,4 +1,4 @@
-public class Habilidade  extends HabilidadesEfeito{
+public class Habilidade extends HabilidadesEfeito{
     private String id;
     private String nome;
     private int custoMana;

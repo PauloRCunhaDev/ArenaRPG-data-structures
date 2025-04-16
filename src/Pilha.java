@@ -9,8 +9,8 @@ public class Pilha {
         this.size = size;
     }
 
-    public void push(String data){
-        No newNo = new No(data);
+    public void push(Personagem personagem){
+        No newNo = new No(personagem);
 
         if(head == null){
             this.head = newNo;
@@ -62,5 +62,29 @@ public class Pilha {
         }
 
         return contador == size;
+    }
+
+    public No getHead() {
+        return head;
+    }
+
+    public void setHead(No head) {
+        this.head = head;
+    }
+
+    public No getTail() {
+        return tail;
+    }
+
+    public void setTail(No tail) {
+        this.tail = tail;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }
